@@ -156,6 +156,12 @@ bool CmdParser::processCmd(const string& cmd_str)
       if (!cmd->exactMatch() || (cmd_str.size() == cmd->cmdStr().size()))
       {
         (*cmd)(cmd_str.substr(len, cmd_str.size()-len));
+        // Forward decimal body of C-macros to HIDRAW Remote radio control
+      if (!cmd_str.empty() && cmd_str[0] == 'C') {
+         std::string body = cmd_str.substr(1);   // remove 'C'
+         Hid::sendToHidrawPins(body);
+}
+
         return true;
       }
     }
