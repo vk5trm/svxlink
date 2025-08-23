@@ -1,0 +1,9 @@
+SUBSYSTEM!="hidraw", GOTO="my_usb_hidraw_end"
+ACTION!="add", GOTO="my_usb_hidraw_end"
+
+DEVPATH==" /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3:1.3/0003:0D8C:013A.0003/hidraw/hidraw?", ATTR{id}="GM300_RPTR"
+DEVPATH==" /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1.2/1-1.1.2:1.3/0003:0D8C:013A.0007/hidraw/hidraw?", ATTR{id}="GM300_Simplex"
+
+LABEL="my_usb_hidraw_end"
+
+
