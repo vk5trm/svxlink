@@ -4,19 +4,24 @@
 #
 ###############################################################################
 
-# Source basic logic core functionality
-sourceTclWithOverrides "LogicBase.tcl"
-
+# Source locale handling code
+sourceTclWithOverrides "locale.tcl"
 
 # Wrap all variables and functions in a namespace
 namespace eval Logic {
+
+# Enable finding commands in the parent namespace from this namespace
+namespace path [namespace parent]
+
+# Add the logic_name variable to the Logic namespace to support legacy TCL code
+variable logic_name ${::logic_name}
 
 # A variable used to store a timestamp for the last identification.
 variable prev_ident 0
 
 # A constant that indicates the minimum time in seconds to wait between two
 # identifications. Manual and long identifications is not affected.
-variable min_time_between_ident 120
+variable min_time_between_ident 600
 
 # Short and long identification intervals. They are setup from config
 # variables below.
@@ -62,6 +67,30 @@ variable sql_rx_id "?"
 
 # Load TCL code modules
 sourceTclWithOverrides "CW.tcl"
+
+
+#
+# An "overloaded" playMsg that eliminates the need to write "Core" as the first
+# argument everywhere.
+# For legacy code support, if more than one argument is given to the function
+# it will call the original playMsg using all given arguments
+#
+proc playMsg {args} {
+  if {[llength $args] == 1} {
+    ::playMsg Core $args
+  } else {
+    ::playMsg {*}$args
+  }
+}
+
+
+#
+# A convenience function for printing out information prefixed by the
+# module name
+#
+proc printInfo {msg} {
+  puts "${::logic_name}: ${msg}"
+}
 
 
 #
