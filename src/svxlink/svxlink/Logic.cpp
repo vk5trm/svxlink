@@ -91,7 +91,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "QsoRecorder.h"
 //#include "LinkManager.h"
 #include "DtmfDigitHandler.h"
-
+#include "HidWriter.h"
 
 /****************************************************************************
  *
@@ -408,6 +408,12 @@ bool Logic::initialize(Async::Config& cfgobj, const std::string& logic_name)
   cfg().getValue(name(), "FX_GAIN_LOW", fx_gain_low);
 
   AudioSource *prev_rx_src = 0;
+
+std::string hid_dev;
+if (cfg.getValue("GLOBAL", "RADIO_REMOTE_CONTROL_HIDRAW_DEVICE", hid_dev)) {
+    Hid::setDevice(hid_dev);
+    std::cout << "--- Radio Remote Control HIDRAW output enabled: " << hid_dev << std::endl;
+
 
     // Create the RX object
   cout << name() << ": Loading RX \"" << rx_name << "\"" << endl;
