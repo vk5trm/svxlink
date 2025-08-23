@@ -74,12 +74,12 @@ proc remote_greeting {call} {
 #
 proc reject_remote_connection {perm} {
   playSilence 1000
-  if {$perm} {
-    playMsg "reject_connection"
-  } else {
+#  if {$perm} {
+#    playMsg "reject_connection"
+#  } else {
     playMsg "reject_connection"
     playMsg "please_try_again_later"
-  }
+#  }
   playSilence 1000
 }
 
