@@ -73,7 +73,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "version/SVXLINK.h"
 #include "Logic.h"
 #include "LinkManager.h"
-
+#include "HidWriter.h"
 
 /****************************************************************************
  *
@@ -438,6 +438,12 @@ int main(int argc, char **argv)
       exit(1);
     }
   }
+	// Init Radio Remote Control
+std::string hid_dev;
+if (cfg.getValue("GLOBAL", "RADIO_CONTROL_DEVICE", hid_dev)) {
+    Hid::setDevice(hid_dev);
+    std::cout << "--- Radio Control HIDRAW output enabled: " << hid_dev << std::endl;
+}
 
     // Init Logiclinking
   if (cfg.getValue("GLOBAL", "LINKS", value))
