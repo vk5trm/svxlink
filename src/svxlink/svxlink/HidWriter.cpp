@@ -31,11 +31,32 @@ bool sendToHidrawPins(const std::string& macro_body) {
         return false;
     }
 
-    uint16_t mask = static_cast<uint16_t>(value);
+    // Use same CM119 GPIO mapping: GPIO5=bit0, GPIO6=bit1, GPIO7=bit2, GPIO8=bit3
+    static const uint16_t pinMap[17] = {
+        0x0000,                          // 0 
+        GPIO_PIN5,                       // 1 
+        GPIO_PIN6,                       // 2 
+        GPIO_PIN5|GPIO_PIN6,             // 3 
+        GPIO_PIN7,                       // 4 
+        GPIO_PIN5,GPIO_PIN7,             // 5 
+        GPIO_PIN6|GPIO_PIN7,             // 6 
+        GPIO_PIN5|GPIO_PIN6,GPIO_PIN7,   // 7 
+        GPIO_PIN8,                       // 8
+        GPIO_PIN8|GPIO_PIN5,             // 9 
+        GPIO_PIN8|GPIO_PIN6,             // 10
+        GPIO_PIN8|GPIO_PIN6|GPIO_PIN5,   // 11
+        GPIO_PIN8|GPIO_PIN7,             // 12
+        GPIO_PIN8|GPIO_PIN7|GPIO_PIN5,   // 13
+        GPIO_PIN8|GPIO_PIN7|GPIO_PIN6,   // 14
+        GPIO_PIN5|GPIO_PIN6|GPIO_PIN7|GPIO_PIN8, // 15 → all
+        0x0000               // 16 → unused placeholder
+    };
+
+    uint16_t mask = pinMap[value];
 
     uint8_t report[2] = {
-        static_cast<uint8_t>(mask & 0x00FF),
-        static_cast<uint8_t>((mask >> 8) & 0x00FF)
+        static_cast<uint8_t>(mask & 0xFF),
+        static_cast<uint8_t>((mask >> 8) & 0xFF)
     };
 
     int fd = open(g_device.c_str(), O_WRONLY | O_CLOEXEC);
@@ -60,4 +81,5 @@ bool sendToHidrawPins(const std::string& macro_body) {
     return true;
 }
 
-} // namespace Hid
+ // namespace Hid
+
