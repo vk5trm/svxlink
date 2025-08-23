@@ -410,9 +410,9 @@ bool Logic::initialize(Async::Config& cfgobj, const std::string& logic_name)
   AudioSource *prev_rx_src = 0;
 
 std::string hid_dev;
-if (cfg.getValue("GLOBAL", "RADIO_REMOTE_CONTROL_HIDRAW_DEVICE", hid_dev)) {
+if (cfg.getValue("GLOBAL", "RADIO_CONTROL_DEVICE", hid_dev)) {
     Hid::setDevice(hid_dev);
-    std::cout << "--- Radio Remote Control HIDRAW output enabled: " << hid_dev << std::endl;
+    std::cout << "--- Radio Control HIDRAW output enabled: " << hid_dev << std::endl;
 
 
     // Create the RX object
